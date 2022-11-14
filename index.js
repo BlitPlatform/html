@@ -23,12 +23,12 @@ $(document).ready(function () {
   });
 
   // ---- Mesh Section
-  $("#Mesh-anchor").click(() => {
-    $("#modeling").hide();
-    $("#mesh").show();
-    $("#simulation").hide();
-    $("#result").hide();
-  });
+  // $("#Mesh-anchor").click(() => {
+  //   $("#modeling").hide();
+  //   $("#mesh").show();
+  //   $("#simulation").hide();
+  //   $("#result").hide();
+  // });
 
   // ---- Simulation Section
   let click = 0;

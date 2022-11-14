@@ -1,6 +1,4 @@
-import {
-  scene
-} from "../../../index.js";
+import { scene } from "../../../index.js";
 
 const canvas = document.querySelectorAll("canvas")[0];
 
@@ -11,10 +9,9 @@ engine.preserveDrawingBuffer = false;
 engine.enableOfflineSupport = false;
 engine.doNotHandleContextLost = false;
 engine.loadingUIBackgroundColor = "#000000e1";
-window.addEventListener("resize", function() {
+window.addEventListener("resize", function () {
   engine.resize();
 });
-
 
 const setTopBottomRatio = (camera) => {
   const ratio = canvas.height / canvas.width;
@@ -26,34 +23,34 @@ const zoom2DView = async (camera, delta) => {
   const zoomingOut = delta < 0;
 
   if (zoomTarget) {
-      var totalX = Math.abs(camera.orthoLeft - camera.orthoRight);
-      var totalY = Math.abs(camera.orthoTop - camera.orthoBottom);
+    var totalX = Math.abs(camera.orthoLeft - camera.orthoRight);
+    var totalY = Math.abs(camera.orthoTop - camera.orthoBottom);
 
-      const aspectRatio = totalY / totalX;
+    const aspectRatio = totalY / totalX;
 
-      {
-          const fromCoord = camera.orthoLeft - zoomTarget.x;
-          const ratio = fromCoord / totalX;
-          camera.orthoLeft -= ratio * delta;
-      }
+    {
+      const fromCoord = camera.orthoLeft - zoomTarget.x;
+      const ratio = fromCoord / totalX;
+      camera.orthoLeft -= ratio * delta;
+    }
 
-      {
-          const fromCoord = camera.orthoRight - zoomTarget.x;
-          const ratio = fromCoord / totalX;
-          camera.orthoRight -= ratio * delta;
-      }
+    {
+      const fromCoord = camera.orthoRight - zoomTarget.x;
+      const ratio = fromCoord / totalX;
+      camera.orthoRight -= ratio * delta;
+    }
 
-      {
-          const fromCoord = camera.orthoTop - zoomTarget.y;
-          const ratio = fromCoord / totalY;
-          camera.orthoTop -= ratio * delta * aspectRatio;
-      }
+    {
+      const fromCoord = camera.orthoTop - zoomTarget.y;
+      const ratio = fromCoord / totalY;
+      camera.orthoTop -= ratio * delta * aspectRatio;
+    }
 
-      {
-          const fromCoord = camera.orthoBottom - zoomTarget.y;
-          const ratio = fromCoord / totalY;
-          camera.orthoBottom -= ratio * delta * aspectRatio;
-      }
+    {
+      const fromCoord = camera.orthoBottom - zoomTarget.y;
+      const ratio = fromCoord / totalY;
+      camera.orthoBottom -= ratio * delta * aspectRatio;
+    }
   }
 
   // decrease pan sensitivity the closer the zoom level.
@@ -82,7 +79,6 @@ const resetCameraZoom = (camera) => {
 
   setTopBottomRatio(camera);
 };
-
 
 export function createBabylonScene() {
   const scene = new BABYLON.Scene(engine);
@@ -146,29 +142,36 @@ export function createBabylonScene() {
   //   $(".sidebar-elements").append(emptyScene);
   // }
 
-
   //////////////
-  var camera = new BABYLON.ArcRotateCamera('Camera', 0, 0, -20, new BABYLON.Vector3(1, 2, -3), scene);
+  var camera = new BABYLON.ArcRotateCamera(
+    "Camera",
+    0,
+    0,
+    -20,
+    new BABYLON.Vector3(1, 2, -3),
+    scene
+  );
   resetCameraZoom(camera);
   window.camera = camera;
-  scene.onPointerObservable.add(({
-      event
-  }) => {
-      const delta = (Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail || event.deltaY)))) * 2;
-      zoom2DView(camera, delta);
+  scene.onPointerObservable.add(({ event }) => {
+    const delta =
+      Math.max(
+        -1,
+        Math.min(1, event.wheelDelta || -event.detail || event.deltaY)
+      ) * 2;
+    zoom2DView(camera, delta);
   }, BABYLON.PointerEventTypes.POINTERWHEEL);
 
   scene.onPointerObservable.add(() => {
-      zoomTarget = BABYLON.Vector3.Unproject(
-          new BABYLON.Vector3(scene.pointerX, scene.pointerY, 0),
-          engine.getRenderWidth(),
-          engine.getRenderHeight(),
-          camera.getWorldMatrix(),
-          camera.getViewMatrix(),
-          camera.getProjectionMatrix()
-      );
+    zoomTarget = BABYLON.Vector3.Unproject(
+      new BABYLON.Vector3(scene.pointerX, scene.pointerY, 0),
+      engine.getRenderWidth(),
+      engine.getRenderHeight(),
+      camera.getWorldMatrix(),
+      camera.getViewMatrix(),
+      camera.getProjectionMatrix()
+    );
   }, BABYLON.PointerEventTypes.POINTERMOVE);
-
 
   // lock the camera's placement, zooming is done manually in orthographic mode.
   // Locking this fixes strange issues with Hemispheric Light
@@ -179,9 +182,12 @@ export function createBabylonScene() {
   camera.attachControl(canvas, true, false, 0);
   camera.mode = BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
 
-
   // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-  var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+  var light = new BABYLON.HemisphericLight(
+    "light",
+    new BABYLON.Vector3(0, 1, 0),
+    scene
+  );
   light.intensity = 0.7;
   ////////////////////////////////////
 
